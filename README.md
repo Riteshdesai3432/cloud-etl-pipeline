@@ -211,17 +211,6 @@ ETL PIPELINE COMPLETED SUCCESSFULLY
 
 ---
 
-## 📸 Screenshots
-
-Add screenshots here after deployment:
-
-* Amazon S3 Bucket
-* EC2 Instance
-* PostgreSQL Tables
-* ETL Execution Output
-
----
-
 ## 📈 Future Improvements
 
 * Amazon RDS PostgreSQL
