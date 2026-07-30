@@ -1,90 +1,99 @@
-# ☁️ Cloud ETL Pipeline using AWS S3, PostgreSQL & Python
+# 🚀 Cloud ETL Pipeline using Python, AWS S3, EC2 & Amazon RDS
 
 ## 📌 Project Overview
 
-This project is an end-to-end Cloud ETL (Extract, Transform, Load) Pipeline built using Python and AWS services. It extracts employee data from an Amazon S3 bucket, validates and cleans the data using Pandas, uploads the processed CSV back to Amazon S3, and loads the cleaned data into PostgreSQL.
+This project is an end-to-end **Cloud ETL (Extract, Transform, Load) Pipeline** built using **Python**, **Pandas**, **AWS S3**, **Amazon EC2**, and **Amazon RDS PostgreSQL**.
 
-The project demonstrates how cloud-based ETL pipelines are built in production environments using AWS.
+The pipeline reads raw employee data from an Amazon S3 bucket, validates and cleans the data using Pandas, uploads the cleaned dataset back to Amazon S3, and finally loads the processed data into an Amazon RDS PostgreSQL database.
+
+The entire ETL application is deployed and executed on an **Amazon EC2 Ubuntu instance**, making it a cloud-native data engineering project.
 
 ---
 
-## 🏗️ Architecture
+# 🏗️ Architecture
 
-```
+```text
                 Amazon S3
-          (Raw Employee CSV)
-                   │
-                   ▼
-          Extract using boto3
-                   │
-                   ▼
-        Validate & Transform
-             (Pandas)
-                   │
-        ┌──────────┴──────────┐
-        ▼                     ▼
- Amazon S3              PostgreSQL
-Processed CSV          Cleaned Data
+         (employees_large.csv)
+                    │
+                    ▼
+        Amazon EC2 (Ubuntu Linux)
+          Python ETL Pipeline
+                    │
+     Extract → Validate → Transform
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+ Amazon S3                 Amazon RDS
+Processed CSV        PostgreSQL Database
+employees_clean.csv   employees_clean Table
 ```
 
 ---
 
-## 🚀 Features
+# ✨ Features
 
-* Read CSV files directly from Amazon S3
-* Validate data quality
+* Read raw CSV data from Amazon S3
+* Validate dataset quality
 * Remove duplicate employee records
-* Handle missing values
-* Validate categorical columns
-* Clean invalid salary values
-* Upload cleaned CSV to Amazon S3
-* Load processed data into PostgreSQL
-* Modular ETL architecture
-* Logging support
-* Configuration using environment variables
+* Detect missing and invalid values
+* Clean and transform data using Pandas
+* Save cleaned CSV locally
+* Upload cleaned CSV back to Amazon S3
+* Load cleaned data into Amazon RDS PostgreSQL
+* Logging for every ETL stage
+* Modular project structure
+* Deployable on Amazon EC2
 
 ---
 
-## 🛠️ Technologies Used
+# 🛠️ Tech Stack
 
 ### Programming
 
-* Python 3.11+
-
-### Python Libraries
-
-* pandas
+* Python 3
+* Pandas
+* SQLAlchemy
 * boto3
-* psycopg2-binary
+* psycopg2
 * python-dotenv
 
 ### AWS Services
 
 * Amazon S3
-* IAM
-* EC2 (Deployment)
+* Amazon EC2
+* Amazon RDS (PostgreSQL)
+* IAM Roles
 * AWS CLI
 
 ### Database
 
 * PostgreSQL
 
+### Tools
+
+* Git
+* GitHub
+* Ubuntu Linux
+
 ---
 
-## 📁 Project Structure
+# 📂 Project Structure
 
 ```
 cloud-etl-pipeline/
+
 │
 ├── config/
+│   ├── __init__.py
 │   └── config.py
 │
 ├── pipeline/
 │   ├── extract.py
 │   ├── validate.py
 │   ├── transform.py
-│   ├── upload_to_s3.py
 │   ├── load.py
+│   ├── upload_to_s3.py
 │   └── logger.py
 │
 ├── scripts/
@@ -95,58 +104,95 @@ cloud-etl-pipeline/
 │   ├── raw/
 │   └── processed/
 │
-├── logs/
-│
 ├── requirements.txt
-├── .gitignore
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
 ---
 
-## ⚙️ ETL Workflow
+# 🔄 ETL Workflow
 
-### 1️⃣ Extract
+### Extract
 
-* Read employee dataset from Amazon S3
-* Load data into a Pandas DataFrame
+* Read employee CSV from Amazon S3
+* Load into a Pandas DataFrame
 
-### 2️⃣ Validate
+### Validate
 
-* Check missing values
-* Check duplicate records
-* Validate categorical columns
-* Validate salary values
+Checks include:
 
-### 3️⃣ Transform
+* Missing Departments
+* Duplicate Employee IDs
+* Duplicate Rows
+* Negative Salary Values
+* Invalid Gender
+* Invalid Business Travel
+* Invalid Employee Count
+* Invalid Standard Hours
+* Invalid Age
+
+### Transform
 
 * Remove duplicate employee records
 * Clean invalid values
-* Prepare clean dataset
+* Save cleaned CSV locally
 
-### 4️⃣ Load
+### Upload
 
-* Upload cleaned CSV to Amazon S3
-* Load cleaned data into PostgreSQL
+* Upload processed CSV to Amazon S3
+
+### Load
+
+* Load cleaned dataset into Amazon RDS PostgreSQL using SQLAlchemy
 
 ---
 
-## ▶️ Running the Project
+# ☁️ AWS Services Used
 
-### Clone Repository
+## Amazon S3
+
+* Store raw employee dataset
+* Store cleaned dataset
+
+## Amazon EC2
+
+* Host the ETL application
+* Execute the complete pipeline
+* Run Ubuntu Linux environment
+
+## Amazon RDS
+
+* Store processed employee data
+* PostgreSQL managed by AWS
+
+## IAM Role
+
+* Securely access S3 without storing AWS Access Keys
+
+---
+
+# ▶️ How to Run
+
+Clone the repository
 
 ```bash
 git clone https://github.com/Riteshdesai3432/cloud-etl-pipeline.git
+```
+
+Move into the project
+
+```bash
 cd cloud-etl-pipeline
 ```
 
-### Create Virtual Environment
+Create a virtual environment
 
 ```bash
 python -m venv venv
 ```
 
-### Activate
+Activate the environment
 
 Windows
 
@@ -160,71 +206,74 @@ Linux
 source venv/bin/activate
 ```
 
-### Install Dependencies
+Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Configure Environment Variables
+Configure your AWS S3 bucket and PostgreSQL database in `config/config.py`.
 
-Create a `.env` file and configure:
-
-```
-DB_HOST=
-DB_PORT=
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-AWS_DEFAULT_REGION=
-```
-
-### Run
+Run the ETL pipeline
 
 ```bash
-python scripts/main.py
+python -m scripts.main
 ```
 
 ---
 
-## 📊 Sample Output
+# 📊 Sample Output
 
 ```
 EXTRACT PHASE
-✔ Reading data from Amazon S3
+✔ File Loaded Successfully
 
 VALIDATION PHASE
-✔ Missing Values Checked
-✔ Duplicate Employees Removed
+✔ Validation Completed
 
 TRANSFORM PHASE
-✔ Data Cleaned Successfully
+✔ Duplicate Records Removed
+
+UPLOAD TO AMAZON S3
+✔ Processed CSV Uploaded Successfully
 
 LOAD PHASE
-✔ Uploaded Clean CSV to Amazon S3
-✔ Loaded Data into PostgreSQL
+✔ Data Loaded into Amazon RDS PostgreSQL
 
 ETL PIPELINE COMPLETED SUCCESSFULLY
 ```
 
 ---
 
-## 📈 Future Improvements
+# 📚 Skills Demonstrated
 
-* Amazon RDS PostgreSQL
-* Apache Airflow Orchestration
-* Docker Containerization
-* AWS Lambda
-* AWS Glue
-* Amazon Athena
-* Terraform
+* ETL Pipeline Development
+* Python Programming
+* Pandas Data Processing
+* PostgreSQL
+* SQLAlchemy
+* AWS S3
+* Amazon EC2
+* Amazon RDS
+* IAM Roles
+* Linux
+* Git & GitHub
+* Cloud Deployment
+
+---
+
+# 🚀 Future Improvements
+
+* Dockerize the application
+* Schedule ETL using Apache Airflow
+* Process streaming data using Apache Kafka
+* Process large datasets using Apache Spark (PySpark)
+* Add CloudWatch monitoring and alerts
 * CI/CD using GitHub Actions
 
 ---
 
-## 👨‍💻 Author
+# 👨‍💻 Author
 
 **Ritesh Desai**
 
