@@ -1,31 +1,49 @@
 import pandas as pd
+import boto3
+from io import StringIO
+
+from config.config import (
+    DATA_SOURCE,
+    LOCAL_FILE,
+    S3_BUCKET,
+    S3_KEY
+)
 
 
-def extract_data(file_path):
-    """
-    Reads a CSV file and returns a Pandas DataFrame.
-    """
+def extract_data():
 
-    try:
-        df = pd.read_csv(file_path)
+    print("=" * 50)
+    print("EXTRACT PHASE")
+    print("=" * 50)
 
-        print("=" * 50)
-        print("EXTRACT PHASE")
-        print("=" * 50)
-        print(f"File Loaded Successfully")
-        print(f"Rows    : {df.shape[0]}")
-        print(f"Columns : {df.shape[1]}")
+    # Read from Local CSV
+    if DATA_SOURCE == "local":
 
-        return df
+        print("Reading data from Local File...")
 
-    except FileNotFoundError:
-        print(f"ERROR: File not found -> {file_path}")
-        return None
+        df = pd.read_csv("LOCAL_FILE")
 
-    except pd.errors.EmptyDataError:
-        print("ERROR: CSV file is empty.")
-        return None
+    # Read from Amazon S3
+    elif DATA_SOURCE == "s3":
 
-    except Exception as e:
-        print(f"Unexpected Error: {e}")
-        return None
+        print("Reading data from S3...")
+
+        s3 = boto3.client("s3")
+
+        response = s3.get_object(
+            Bucket=S3_BUCKET,
+            Key=S3_KEY
+        )
+
+        csv_data = response["Body"].read().decode("utf-8")
+
+        df = pd.read_csv(StringIO(csv_data))
+
+    else:
+        raise ValueError("Invalid DATA_SOURCE. Use 'local' or 's3'.")
+
+    print("File Loaded Successfully")
+    print(f"Rows    : {df.shape[0]}")
+    print(f"Columns : {df.shape[1]}")
+
+    return df

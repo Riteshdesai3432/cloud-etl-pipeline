@@ -4,23 +4,23 @@ from pipeline.transform import transform_data
 from pipeline.load import load_data
 from pipeline.logger import write_log
 from pathlib import Path
+from pipeline.upload_to_s3 import upload_processed_csv
 
 
 def main():
+
     print("=" * 60)
     print("EMPLOYEE DATA ETL PIPELINE")
     print("=" * 60)
 
-    # CSV File Path
     BASE_DIR = Path(__file__).resolve().parent.parent
 
-    RAW_DATA = BASE_DIR / "data" / "raw" / "employees_large.csv"
     PROCESSED_DATA = BASE_DIR / "data" / "processed" / "employees_clean.csv"
 
     # ------------------------
     # EXTRACT
     # ------------------------
-    df = extract_data(RAW_DATA)
+    df = extract_data()
 
     if df is None:
         write_log("ETL Failed - Could not extract data.")
@@ -46,9 +46,13 @@ def main():
     # ------------------------
     cleaned_df = transform_data(df)
 
+    # Save locally
     cleaned_df.to_csv(PROCESSED_DATA, index=False)
 
-    print("\nCleaned CSV Saved Successfully")
+    print("\nCleaned CSV Saved Locally")
+
+    # Upload to Amazon S3
+    upload_processed_csv(cleaned_df)
 
     write_log("Transform Phase Completed Successfully")
 

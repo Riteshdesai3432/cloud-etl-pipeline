@@ -1,12 +1,31 @@
-import os
-from dotenv import load_dotenv
+# ==============================
+# DATA SOURCE
+# ==============================
 
-load_dotenv()
+DATA_SOURCE = "s3"      # local or s3
+
+# ==============================
+# LOCAL FILE
+# ==============================
+
+LOCAL_FILE = "data/raw/employees_large.csv"
+
+# ==============================
+# AMAZON S3
+# ==============================
+
+S3_BUCKET = "ritesh-data-engineering-2026-943938400719-ap-south-1-an"
+S3_KEY = "raw/employees_large.csv"
+S3_PROCESSED_KEY = "processed/employees_clean.csv"
+
+# ==============================
+# POSTGRESQL
+# ==============================
 
 DB_CONFIG = {
-    "host": os.getenv("DB_HOST"),
-    "port": os.getenv("DB_PORT"),
-    "database": os.getenv("DB_NAME"),
-    "user": os.getenv("DB_USER"),
-    "password": os.getenv("DB_PASSWORD")
+    "user": "postgres",
+    "password": "343212",
+    "host": "localhost",
+    "port": "5432",
+    "database": "data_engineering"
 }
