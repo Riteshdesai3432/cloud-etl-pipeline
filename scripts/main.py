@@ -62,10 +62,11 @@ def main():
     # ------------------------
     # LOAD
     # ------------------------
-    # load_data(cleaned_df)
-    #
-    # write_log(f"Rows Loaded: {len(cleaned_df)}")
+    load_data(cleaned_df)
+    
+    write_log(f"Rows Loaded: {len(cleaned_df)}")
 
+    
     print("\n" + "=" * 60)
     print("ETL PIPELINE COMPLETED SUCCESSFULLY")
     print("=" * 60)
@@ -73,3 +74,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

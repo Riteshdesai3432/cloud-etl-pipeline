@@ -23,9 +23,9 @@ S3_PROCESSED_KEY = "processed/employees_clean.csv"
 # ==============================
 
 DB_CONFIG = {
-    "user": "postgres",
-    "password": "343212",
-    "host": "localhost",
+    "host": "database-1.chs22egcybw6.ap-south-1.rds.amazonaws.com",
     "port": "5432",
-    "database": "data_engineering"
+    "database": "data_engineering",
+    "user": "postgres",
+    "password": "34321234"
 }
