@@ -47,6 +47,9 @@ def main():
     cleaned_df = transform_data(df)
 
     # Save locally
+    # cleaned_df.to_csv(PROCESSED_DATA, index=False)
+
+    Path(PROCESSED_DATA).parent.mkdir(parents=True, exist_ok=True)
     cleaned_df.to_csv(PROCESSED_DATA, index=False)
 
     print("\nCleaned CSV Saved Locally")
