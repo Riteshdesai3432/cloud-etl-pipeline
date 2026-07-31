@@ -62,10 +62,16 @@ def main():
     # ------------------------
     # LOAD
     # ------------------------
-    load_data(cleaned_df)
-    
-    write_log(f"Rows Loaded: {len(cleaned_df)}")
+    success = load_data(cleaned_df)
 
+    if success:
+        write_log(f"Rows Loaded: {len(cleaned_df)}")
+    else:
+        write_log("Load Phase Failed")
+        print("\n" + "=" * 60)
+        print("ETL PIPELINE FAILED")
+        print("=" * 60)
+        return
     
     print("\n" + "=" * 60)
     print("ETL PIPELINE COMPLETED SUCCESSFULLY")

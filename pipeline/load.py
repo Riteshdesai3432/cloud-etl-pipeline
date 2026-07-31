@@ -24,15 +24,19 @@ def load_data(df):
         engine = create_engine(connection_string)
 
         df.to_sql(
-            name= "employees_clean",
+            name="employees_clean",
             con=engine,
             if_exists="replace",
             index=False
         )
 
         print("Data loaded successfully into PostgreSQL.")
-        print(f"Rows Loaded:{len(df)}")
+        print(f"Rows Loaded: {len(df)}")
+
+        return True
 
     except Exception as e:
         print("Load Failed")
         print(e)
+
+        return False
